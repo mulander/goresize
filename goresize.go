@@ -1,10 +1,10 @@
 package main
 
 import (
+	"appengine-go/example/moustachio/resize"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"appengine-go/example/moustachio/resize"
 	"image/jpeg"
 	"io"
 	"log"
@@ -62,7 +62,6 @@ func main() {
 
 			mlog.Println(newName)
 
-			
 			if _, err = ir.Seek(0, 0); err != nil {
 				mlog.Fatalln(err)
 			}
@@ -76,25 +75,25 @@ func main() {
 
 			// Taken from: https://code.google.com/p/appengine-go/source/browse/example/moustachio/moustachio/http.go
 			// License: BSD-style
-	        // Resize if too large, for more efficient moustachioing.
-	        // We aim for less than 1200 pixels in any dimension; if the
-	        // picture is larger than that, we squeeze it down to 600.
-	        const max = 1200
-            // If it's gigantic, it's more efficient to downsample first
-            // and then resize; resizing will smooth out the roughness.
-            if b := i.Bounds(); b.Dx() > 640 || b.Dy() > 480 {
-	            if b.Dx() > 2*max || b.Dy() > 2*max {
-	                    w, h := max, max
-	                    if b.Dx() > b.Dy() {
-	                            h = b.Dy() * h / b.Dx()
-	                    } else {
-	                            w = b.Dx() * w / b.Dy()
-	                    }
-	                    i = resize.Resample(i, i.Bounds(), w, h)
-	                    b = i.Bounds()
-	            }
-	            i = resize.Resize(i, i.Bounds(), 640, 480)
-        	}
+			// Resize if too large, for more efficient moustachioing.
+			// We aim for less than 1200 pixels in any dimension; if the
+			// picture is larger than that, we squeeze it down to 600.
+			const max = 1200
+			// If it's gigantic, it's more efficient to downsample first
+			// and then resize; resizing will smooth out the roughness.
+			if b := i.Bounds(); b.Dx() > 640 || b.Dy() > 480 {
+				if b.Dx() > 2*max || b.Dy() > 2*max {
+					w, h := max, max
+					if b.Dx() > b.Dy() {
+						h = b.Dy() * h / b.Dx()
+					} else {
+						w = b.Dx() * w / b.Dy()
+					}
+					i = resize.Resample(i, i.Bounds(), w, h)
+					b = i.Bounds()
+				}
+				i = resize.Resize(i, i.Bounds(), 640, 480)
+			}
 
 			out, err := os.Create(filepath.FromSlash(fmt.Sprintf("%s/%s.jpg", target, newName)))
 			if err != nil {
