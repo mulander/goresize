@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	logf, err := os.OpenFile("info.txt", os.O_APPEND|os.O_CREATE, 0640)
+	logf, err := os.OpenFile("info.txt", os.O_RDWR|os.O_APPEND|os.O_CREATE, 0640)
 	if err != nil {
 		log.Fatal(err)
 	}
